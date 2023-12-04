@@ -432,6 +432,78 @@ search_backup()
 
 }
 
+record_s_item()
+{
+    FILE *f;
+    FILE *pt;
+    FILE *l;
+    FILE *lt;
+    char nm[20];
+    //char* tp, *ret;
+    //char* fmt = "%[^\n]%*c";
+    int c,e,b=0;
+    printf("Enter  an item name (The first letter must be capital): ");
+    scanf("%s",nm);
+    f=fopen("ItemsC.txt","r");
+    l=fopen("s_item.txt","a");
+    while (!feof(f))
+    {
+        fscanf(f, "%d\t%[^\t]%*c\t%d\n", &i.id, i.name, &i.price);
+        //ret= strstr(tp,nm);
+        if(strstr(i.name, nm) != NULL)
+        {
+            b++;
+            fprintf(l, "%d\t%s\t%d\n", i.id, i.name, i.price);
+            printf("\nProduct found:\n");
+            if(strlen(i.name)<=8)
+            {
+                printf("\n%d\t%s    \t%d", i.id,i.name,i.price);
+            }
+            else
+            {
+                printf("\n%d\t%s\t%d", i.id,i.name,i.price);
+            }
+
+        }
+
+    }
+    fclose(f);
+    fclose(l);
+    lt=fopen("s_item.txt","r");
+    pt=fopen("l_s_item.txt","a");
+    if(b>1)
+    {
+        printf("\nWhich product do you want to sell?(enter an id):");
+        scanf("%d",&c);
+        while(!feof(lt))
+        {
+            fscanf(lt, "%d\t%[^\t]\t%d\n", &i.id, i.name, &i.price);
+            if(c==i.id)
+            {
+                fprintf(pt, "%d\t%s\t%d\n", i.id, i.name, i.price);
+            }
+
+        }
+    }
+    else
+    {
+        fscanf(lt, "%d\t%[^\t]\t%d\n", &i.id, i.name, &i.price);
+        fprintf(pt, "%d\t%s\t%d\n", i.id, i.name, i.price);
+    }
+    fclose(pt);
+    fclose(lt);
+    remove("s_item.txt");
+    printf("\n\Item recorded");
+
+    printf("\npress 1 to add another item\n.");
+    printf("\npress 0 to continue.");
+    scanf("%d", &e);
+    if(e==1)
+    {
+        record_s_item();
+    }
+}
+
 
 main(){
 
