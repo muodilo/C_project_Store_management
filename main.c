@@ -86,6 +86,75 @@ void Display(void){
     getch();
   
 }
+
+void Del(void)
+{
+    FILE *p, *pt;
+     FILE *t, *n, *nt;
+    p = fopen("ItemsC.txt","r");
+    t = fopen("temp.txt","a");
+    n = fopen("last_id.txt", "r");
+    nt = fopen("tem.txt","w");
+    int id, l_id, b=0,d,new_id=0;
+     //float nbvote, sum;
+    printf("Delete an item.\n");
+    printf("------------\n\n");
+    printf("Do you want to display the catalog before? (yes:1, no:0)\n");
+    scanf("%d", &d);
+    if (d == 1) {
+        Display();
+    }
+    printf("Enter an item id:___");
+    scanf("%d",&id);
+    while(fscanf(p, "%d\t%[^\t]%*c\t%d\n", &i.id, i.name, &i.price) != EOF)
+    {
+        if(i.id==id)
+        {
+            b++;
+            fscanf(n, "%d", &l_id);
+            l_id--;
+            fprintf(nt,"%d", l_id);
+        }
+    }
+    if(b==0)
+    {
+        printf("Id not found!");
+    }
+    else
+    {
+        pt = fopen("ItemsC.txt","r");
+        while(fscanf(pt, "%d\t%[^\t]%*c\t%d\n", &i.id, i.name, &i.price) != EOF)
+        {
+
+            if(i.id!=id)
+            {
+                new_id++;
+                i.id = new_id;
+                fprintf(t, "%d\t%s\t%d\n", i.id, i.name, i.price);
+            }
+        }
+    }
+    fclose(pt);
+    fclose(p);
+    fclose(t);
+    fclose(n);
+    fclose(nt);
+    if(b==0)
+    {
+        remove("temp.txt");
+        remove("tem.txt");
+    }
+    else
+    {
+        remove("ItemsC.txt");
+        remove("last_id.txt");
+        rename("temp.txt","ItemsC.txt");
+        rename("tem.txt","last_id.txt");
+        printf("Data updated!\nPress any key to continue.\n\n");
+        getch();
+    }
+}
+
 main(){
 
 }
