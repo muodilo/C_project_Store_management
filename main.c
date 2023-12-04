@@ -9,9 +9,65 @@ struct Items{
   int price;
 } i;
 
+void Update(void) {
+    FILE *p, *pt;
+    FILE *t;
+    int id, b = 0, d,e=2;
+    printf("Update an item.\n");
+    printf("------------\n");
+    printf("Do you want to display the catalog before? (yes:1, no:0)\n");
+    scanf("%d", &d);
+    if (d == 1) {
+        Display();
+    }
+    printf("Enter an item id: ");
+    scanf("%d", &id);
+    char* fmt = " %[^\n]%*c";
+    p = fopen("ItemsC.txt", "r");
+    t = fopen("temp.txt", "w");
+    while (fscanf(p, "%d\t%[^\t]%*c\t%d\n", &i.id, i.name, &i.price) != EOF) {
+        if (i.id == id) {
+            b++;
+            i.id=1;
+            printf("Id found.\n");
+            printf("Enter name: ");
+            scanf(fmt, i.name);
+            printf("\nEnter price: ");
+            scanf("%d", &i.price);
+            fprintf(t, "%d\t%s\t%d\n", i.id, i.name, i.price);
+        }
+    }
+    fclose(p);
+    fclose(t);
+    if (b == 0) {
+        printf("Id not found!\n");
+    }
+    else
+    {
+        p = fopen("ItemsC.txt", "r");
+        pt = fopen("temp.txt", "a");
+        while (!feof(p))
+        {
+            fscanf(p, "%d\t%[^\t]%*c\t%d\n", &i.id, i.name, &i.price);
+            if (i.id != id)
+            {
+                i.id=e;
+                fprintf(pt, "%d\t%s\t%d\n", i.id, i.name, i.price);
+                e++;
+            }
+        }
+        fclose(p);
+        fclose(pt);
+        remove("ItemsC.txt");
+        rename("temp.txt", "ItemsC.txt");
+    printf("Item updated!\nPress any key to continue.\n\n");
+    getch();
+    }
+}
+
 void Display(void){
   FILE *p;
-  p= fopen("ItemsCollections.txt", "r");
+  p= fopen("ItemsC.txt", "r");
   printf("Display available Products\n------------------------\n\n");
   printf("ID\tNAME\tPRICE");
   printf("\n--\t----\t\t-----\n");
