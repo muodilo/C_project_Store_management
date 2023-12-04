@@ -351,6 +351,41 @@ print_receipt()
     getch();
 }
 
+Sell_items()
+{
+    int choice;
+    FILE *p;
+
+    do
+    {
+        printf("|---------------------------|\n");
+        printf("| SELL ITEMS |\n");
+        printf("|---------------------------|\n");
+
+
+        printf("\n\n1- Record items to be sold.");
+        printf("\n2- print the receipt");
+        printf("\n0- Exit.");
+        printf("\nEnter the action: ");
+        scanf("\n%d", &choice);
+        system("cls");
+        switch(choice)
+        {
+            case 1:
+                record_s_item();
+                printf("\n\nitems recorded\nPress any key to continue.\n\n");
+                getchar();
+                break;
+            case 2:
+                print_receipt();
+                break;
+        }
+        system("cls");
+        }while(choice!=0);
+        remove("l_s_item.txt");
+}
+
+
 
 main(){
 
