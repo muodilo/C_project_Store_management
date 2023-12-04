@@ -505,6 +505,51 @@ record_s_item()
 }
 
 
-main(){
+main()
+{
+    int choice = 0;
+    do
+    {
+
+
+    printf("   +--------------------------------------------+\n");
+    printf("   |      KIGALI TECH Store Sale Program         |\n");
+    printf("   +--------------------------------------------+\n");
+    printf("\n1- Record new product.");
+    printf("\n2- Display available products");
+    printf("\n3- Update a product.");
+    printf("\n4- Delete a product.");
+    printf("\n5- Sell products.");
+    printf("\n6- saved payments");
+    printf("\n0- Exit.");
+    printf("\nEnter the action: ");
+    scanf("\n%d", &choice);
+    system("cls");
+    switch(choice)
+    {
+    case 1:
+        Record();
+        break;
+    case 2:
+        Display();
+
+        break;
+    case 3:
+        Update();
+        break;
+    case 4:
+        Del();
+        break;
+    case 5:
+        Sell_items();
+        break;
+    case 6:
+        search_backup();
+        break;
+    }
+    system("cls");
+    }while(choice!=0);
+    printf("Good Bye!!\n\n");
+
 
 }
