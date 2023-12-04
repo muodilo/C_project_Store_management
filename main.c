@@ -155,6 +155,203 @@ void Del(void)
     }
 }
 
+
+
+Record()
+{
+    FILE *f;
+    FILE *l;
+    FILE *p;
+    int number_of_items,l_id,n;
+    printf("##############################");
+    printf("\n******RECORD NEW PRODUCT******");
+    printf("\n##############################");
+
+    f= fopen("ItemsC.txt","a");
+    l= fopen("last_id.txt","r");
+    if(l==NULL)
+    {
+        l_id=0;
+    }
+    else
+    {
+        fscanf(l,"%d", &l_id);
+    }
+    fclose(l);
+    p= fopen("last_id.txt","w");
+    printf("\n\nHow many items do you want to record: ");
+    scanf("%d",&number_of_items);
+    char* fmt = " %[^\n]%*c";
+    for(n=1;n<=number_of_items;n++)
+    {
+        l_id+=1;
+        i.id = l_id;
+        printf("\nEnter Name: ");
+        scanf(fmt, i.name);
+        printf("\nEnter Price: ");
+        scanf("%d", &i.price);
+        l_id=i.id;
+
+        fprintf(f,"%d\t%s\t%d\n",i.id,i.name,i.price);
+
+    }
+    fclose(f);
+    fprintf(p,"%d",l_id);
+    fclose(p);
+    printf("Data saved!\nPress any key to continue.\n\n");
+    getch();
+}
+
+    struct ReceiptItem
+    {
+        char name[30];
+        int price;
+        int count;
+    };
+
+save(struct ReceiptItem items[100],int itemcount,int total_price)
+{
+    time_t t = time(NULL);
+    int k,j;
+    char* current_time = ctime(&t);
+    FILE *s;
+    s=fopen("save_.txt","a");
+
+    fprintf(s,"Date:%s",current_time);
+    fprintf(s,"------------------------------\n");
+
+    fprintf(s,"+-------------------------------------+---------+\n");
+    fprintf(s,"| Item                | Price | Count | Total   |\n");
+    fprintf(s,"+-------------------------------------+---------+\n");
+
+    for (k = 0; k < itemcount; k++)
+    {
+        if(strlen(items[k].name)<=8)
+        {
+            fprintf(s,"|%s   \t\t%d\t  %d\t%d\t|\n",items[k].name, items[k].price,
+               items[k].count, items[k].price * items[k].count);
+        }
+        else
+        {
+            fprintf(s,"|%s\t\t%d\t  %d\t%d\t|\n",items[k].name, items[k].price,
+               items[k].count, items[k].price * items[k].count);
+        }
+    }
+
+    fprintf(s,"+-----------------------------------------------+\n");
+    fprintf(s,"| Total price:                           $%5d |\n", total_price);
+    fprintf(s,"+-----------------------------------------------+\n\n");
+
+}
+
+float calculate_total_price()
+{
+    FILE *p;
+    float total_price = 0.0;
+    p = fopen("l_s_item.txt", "r");
+
+    if (p == NULL)
+    {
+        printf("Error opening file.\n");
+        return total_price;
+    }
+
+    while (fscanf(p, "%d\t%[^\t]%*c\t%d\n", &i.id, i.name, &i.price) != EOF)
+    {
+        total_price += i.price;
+    }
+
+    fclose(p);
+    return total_price;
+}
+
+print_receipt()
+{
+    int itemcount = 0;
+    int found;
+    FILE *s;
+    time_t t = time(NULL);
+    int j,k;
+    char* current_time = ctime(&t);
+    int total_price = 0;
+    FILE *p;
+    p = fopen("l_s_item.txt", "r");
+
+    if (p == NULL)
+    {
+        printf("Error opening file.\n");
+        return;
+    }
+
+
+
+    struct ReceiptItem items[100];  // Assuming maximum of 100 items
+
+
+    // Read items from file and count their appearances
+    while (fscanf(p, "%d\t%[^\t]%*c\t%d\n", &i.id, i.name, &i.price) != EOF)
+    {
+        int found = 0;
+
+        // Check if the item already exists in the items array
+        for (int j = 0; j < itemcount; j++)
+        {
+            if (strcmp(i.name, items[j].name) == 0)
+            {
+                items[j].count++;
+                found = 1;
+                break;
+            }
+        }
+
+        // If the item doesn't exist, add it to the items array
+        if (!found)
+        {
+            strcpy(items[itemcount].name, i.name);
+            items[itemcount].price = i.price;
+            items[itemcount].count = 1;
+            itemcount++;
+        }
+    }
+
+
+    fclose(p);
+
+
+    printf("Date:%s",current_time);
+    printf("------------------------------\n");
+
+    printf("+-----------------------------------------------+\n");
+    printf("|                   RECEIPT                     |\n");
+
+    printf("+-------------------------------------+---------+\n");
+    printf("| Item                | Price | Count | Total   |\n");
+    printf("+-------------------------------------+---------+\n");
+
+    for (k = 0; k < itemcount; k++)
+    {
+        total_price += items[k].price * items[k].count;
+        if(strlen(items[k].name)<=8)
+        {
+            printf("|%s   \t\t%d\t  %d\t%d\t|\n",items[k].name, items[k].price,
+               items[k].count, items[k].price * items[k].count);
+        }
+        else
+        {
+            printf("|%s\t\t%d\t  %d\t%d\t|\n",items[k].name, items[k].price,
+               items[k].count, items[k].price * items[k].count);
+        }
+    }
+
+    printf("+-----------------------------------------------+\n");
+    printf("| Total price:                           $%5d |\n", total_price);
+    printf("+-----------------------------------------------+\n");
+
+    save(items,itemcount,total_price);
+    getch();
+}
+
+
 main(){
 
 }
