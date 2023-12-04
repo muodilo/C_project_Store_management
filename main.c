@@ -385,6 +385,52 @@ Sell_items()
         remove("l_s_item.txt");
 }
 
+search_backup()
+{
+    FILE* file = fopen("save_.txt", "r");
+    if (file == NULL)
+    {
+        printf("Error opening file.\n");
+        getchar();
+        return;
+    }
+    int b=0;
+    char dt[30];
+    char* fmt = " %[^\n]%*c";
+    printf("Enter  a date : ");
+    scanf(fmt,dt);
+    char line[256];
+    int isDateFound = 0;
+    while (fgets(line, sizeof(line), file)) {
+        // Check if the line contains the date
+        if (strstr(line, dt) != NULL) {
+            isDateFound = 1;
+            b++;
+            if(b=1)
+            {
+                printf("\n\npayments found for the specified date.\n\n");
+            }
+
+            printf("%s", line);  // Print the line with the date
+
+            // Print the following lines until a blank line is encountered
+            while (fgets(line, sizeof(line), file) && strcmp(line, "\n") != 0)
+            {
+                printf("%s", line);
+            }
+            printf("\n");
+        }
+    }
+
+    if (!isDateFound) {
+        printf("No payments found for the specified date.\n");
+    }
+    fclose(file);
+
+    printf("\nPress any key to exit");
+    getchar();
+
+}
 
 
 main(){
